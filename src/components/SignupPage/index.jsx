@@ -4,8 +4,12 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import Button from "@material-ui/core/Button";
 import Link from "@material-ui/core/Link";
+import Snackbar from "@material-ui/core/Snackbar";
+import { Alert } from "@material-ui/lab";
 
 import "./index.css";
+import Axios from "axios";
+// import { withRouter } from "react-router";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -20,6 +24,18 @@ const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPass] = useState("");
   const [rePass, setRePass] = useState("");
+  const [open, setOpen] = useState(false);
+
+  const registerUser = () => {
+    if (password != rePass) setOpen(true);
+    else {
+      Axios.post("http://localhost:4000/signup", { email, password }).then(
+        (res) => {
+          if (res.status === 200) window.location.href = "/login";
+        }
+      );
+    }
+  };
 
   return (
     <div className="login-form-div">
@@ -59,7 +75,7 @@ const SignUp = () => {
       />
       <br />
       <br />
-      <Button variant="contained" color="primary">
+      <Button onClick={registerUser} variant="contained" color="primary">
         Register
       </Button>
       <br />
@@ -68,6 +84,15 @@ const SignUp = () => {
           Already have an account? <Link href="/login">Login</Link> now
         </p>
       </span>
+      <Snackbar
+        open={open}
+        autoHideDuration={2000}
+        onClose={(e) => setOpen(false)}
+      >
+        <Alert variant="filled" severity="error">
+          Passwords don't match — <strong>check it out!</strong>
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

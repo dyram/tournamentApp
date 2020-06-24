@@ -6,6 +6,7 @@ import Button from "@material-ui/core/Button";
 import Link from "@material-ui/core/Link";
 
 import "./index.css";
+import Axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -19,6 +20,17 @@ const useStyles = makeStyles((theme) => ({
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPass] = useState("");
+
+  const loginUser = () => {
+    Axios.post("http://localhost:4000/login", { email, password }).then(
+      (res) => {
+        if (res.data.validity) {
+          localStorage.setItem("userToken", JSON.stringify(res.data));
+          window.location.href = "/";
+        }
+      }
+    );
+  };
 
   return (
     <div className="login-form-div">
@@ -46,7 +58,7 @@ const LoginPage = () => {
       />
       <br />
       <br />
-      <Button variant="contained" color="primary">
+      <Button onClick={loginUser} variant="contained" color="primary">
         Login
       </Button>
       <br />

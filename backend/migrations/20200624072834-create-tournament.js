@@ -17,6 +17,12 @@ module.exports = {
       seatCost: {
         type: Sequelize.FLOAT
       },
+      tDesc: {
+        type: Sequelize.STRING
+      },
+      available: {
+        type: Sequelize.BOOLEAN
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
