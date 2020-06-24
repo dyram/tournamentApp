@@ -36,6 +36,7 @@ const LoginPage = () => {
     <div className="login-form-div">
       <h1>LOGIN</h1>
       <TextField
+        type="email"
         required
         id="outlined-required-email"
         label="Email"

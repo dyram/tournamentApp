@@ -23,6 +23,9 @@ module.exports = {
       available: {
         type: Sequelize.BOOLEAN
       },
+      availSeats: {
+        type: Sequelize.INTEGER
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

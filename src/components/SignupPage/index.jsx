@@ -41,6 +41,7 @@ const SignUp = () => {
     <div className="login-form-div">
       <h1>SIGN-UP</h1>
       <TextField
+        type="email"
         required
         id="outlined-required-email"
         label="Email"

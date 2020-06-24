@@ -5,6 +5,8 @@ module.exports = app => {
 
     const users = require("../models").Users;
 
+    const Tournaments = require("../controllers/tournamentController");
+
     app.get("/", (req, res) => {
         res.send("Working Fine!!");
     });
@@ -51,5 +53,16 @@ module.exports = app => {
                 }
                 res.send(token);
             });
+    })
+
+    app.post("/tournament", (req, res) => {
+        let resp = Tournaments.addTournament(req.body.tName, req.body.tDesc, req.body.available, req.body.seats, req.body.seatCost);
+        res.send(resp);
+    });
+
+    app.get("/tournament", (req, res) => {
+        Tournaments.getTournament().then(resp => {
+            res.send(resp);
+        });
     })
 }

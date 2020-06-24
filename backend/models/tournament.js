@@ -5,7 +5,8 @@ module.exports = (sequelize, DataTypes) => {
     tDesc: DataTypes.STRING,
     available: DataTypes.BOOLEAN,
     seats: DataTypes.INTEGER,
-    seatCost: DataTypes.FLOAT
+    seatCost: DataTypes.FLOAT,
+    availSeats: DataTypes.INTEGER
   }, {});
   Tournament.associate = function (models) {
     // associations can be defined here
