@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import Axios from 'axios';
 
 import LoginPage from "./components/LoginPage"
 import HomePage from "./components/HomePage"
-import Axios from 'axios';
+import SignUp from "./components/SignupPage"
+
 
 function App() {
   useEffect(() => {
@@ -19,7 +20,7 @@ function App() {
       <div className="App">
         <Switch>
           {/* <Route path="/" exact component={() => <Welcome />} /> */}
-          {/* <Route path="/signup" component={() => <Signup />} /> */}
+          <Route path="/signup" component={() => <SignUp />} />
           <Route path="/login" component={() => <LoginPage />} />
           <Route
             crossorigin

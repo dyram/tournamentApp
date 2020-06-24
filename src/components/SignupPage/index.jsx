@@ -16,13 +16,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const LoginPage = () => {
+const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPass] = useState("");
+  const [rePass, setRePass] = useState("");
 
   return (
     <div className="login-form-div">
-      <h1>LOGIN</h1>
+      <h1>SIGN-UP</h1>
       <TextField
         required
         id="outlined-required-email"
@@ -46,17 +47,29 @@ const LoginPage = () => {
       />
       <br />
       <br />
+      <TextField
+        type="password"
+        required
+        id="outlined-required-password"
+        label="Re-confirm Password"
+        // defaultValue="Password"
+        variant="outlined"
+        value={rePass}
+        onChange={(e) => setRePass(e.target.value)}
+      />
+      <br />
+      <br />
       <Button variant="contained" color="primary">
-        Login
+        Register
       </Button>
       <br />
       <span>
         <p className="italic-text">
-          Don't have an account? <Link href="/signup">Sign-up</Link> now
+          Already have an account? <Link href="/login">Login</Link> now
         </p>
       </span>
     </div>
   );
 };
 
-export default LoginPage;
+export default SignUp;
