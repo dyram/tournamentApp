@@ -20,6 +20,9 @@ module.exports = {
       role: {
         type: Sequelize.BOOLEAN
       },
+      google: {
+        type: Sequelize.BOOLEAN
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

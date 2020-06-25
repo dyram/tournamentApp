@@ -5,9 +5,11 @@ module.exports = (sequelize, DataTypes) => {
     password: DataTypes.STRING,
     money: DataTypes.FLOAT,
     role: DataTypes.BOOLEAN,
+    google: DataTypes.BOOLEAN
   }, {});
   Users.associate = function (models) {
     // associations can be defined here
+    Users.hasMany(models.Booking)
   };
   return Users;
 };

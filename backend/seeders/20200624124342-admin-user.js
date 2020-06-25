@@ -9,6 +9,7 @@ module.exports = {
       password: adminPass,
       money: 100.0,
       role: true,
+      google: false,
       createdAt: new Date(),
       updatedAt: new Date()
     }]);

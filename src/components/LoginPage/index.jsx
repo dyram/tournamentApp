@@ -8,6 +8,9 @@ import Link from "@material-ui/core/Link";
 import "./index.css";
 import Axios from "axios";
 
+import GoogleLogin from "react-google-login";
+import { PostData } from "../../services/PostData";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     "& .MuiTextField-root": {
@@ -20,6 +23,7 @@ const useStyles = makeStyles((theme) => ({
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPass] = useState("");
+  const [redirect, setRedirect] = useState(false);
 
   const loginUser = () => {
     Axios.post("http://localhost:4000/login", { email, password }).then(
@@ -28,6 +32,31 @@ const LoginPage = () => {
           localStorage.setItem("userToken", JSON.stringify(res.data));
           window.location.href = "/";
         }
+      }
+    );
+  };
+
+  const responseGoogle = (response) => {
+    console.log(response);
+    let res = response.profileObj;
+    console.log(res);
+    signup(response);
+  };
+
+  const signup = (res) => {
+    const googleresponse = {
+      Name: res.profileObj.name,
+      email: res.profileObj.email,
+      token: res.googleId,
+      Image: res.profileObj.imageUrl,
+      ProviderId: "Google",
+    };
+    Axios.post("http://localhost:4000/googleLogin", googleresponse).then(
+      (result) => {
+        console.log("GOOGLE RESULT", result);
+        let responseJson = result;
+        localStorage.setItem("userToken", JSON.stringify(res.data));
+        window.location.href = "/";
       }
     );
   };
@@ -68,6 +97,14 @@ const LoginPage = () => {
           Don't have an account? <Link href="/signup">Sign-up</Link> now
         </p>
       </span>
+
+      <GoogleLogin
+        clientId="492325847823-220on0hjt640v8shhnuafvesmuikpamv.apps.googleusercontent.com"
+        buttonText="Login"
+        onSuccess={responseGoogle}
+        onFailure={responseGoogle}
+        cookiePolicy={"single_host_origin"}
+      />
     </div>
   );
 };

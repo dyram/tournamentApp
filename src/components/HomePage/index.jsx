@@ -4,16 +4,16 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
+
 import Snackbar from "@material-ui/core/Snackbar";
 import { Alert } from "@material-ui/lab";
 
 import { Link } from "react-router-dom";
+import Axios from "axios";
 
 import AdminPanel from "../AdminPanel";
+import ListView from "./ListView";
 import "./index.css";
-import Axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -37,14 +37,19 @@ const HomePage = () => {
   const [fetchOpen, setFetchOpen] = useState(false);
 
   const [tournaments, setTournaments] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [money, setMoney] = useState({});
+  const [bookings, setBookings] = useState([]);
 
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem("userToken"));
     if (data != null) {
+      getMoney(data.id);
       setUid(data.id);
       setShowLogin(data.validity);
       setAdminLogin(data.role);
       getTournaments();
+      getBooking(data.id);
     } else {
       setShowLogin(false);
       getTournaments();
@@ -54,9 +59,27 @@ const HomePage = () => {
   const getTournaments = () => {
     Axios.get("http://localhost:4000/tournament").then((res) => {
       if (res.status === 200) {
-        setTournaments(res.data);
+        // console.log("GET TOURNAMENTS", res.data);
+        setTournaments([...res.data]);
         setFetchOpen(true);
-        console.log("TOURNAMENT DATA", res.data);
+        getUsers();
+      }
+    });
+  };
+
+  const getUsers = () => {
+    Axios.get("http://localhost:4000/users").then((res) => {
+      console.log("USERS", res);
+      if (res.status === 200) {
+        setUsers([...res.data]);
+      }
+    });
+  };
+
+  const getMoney = (data) => {
+    Axios.post("http://localhost:4000/user", { data }).then((res) => {
+      if (res.status === 200) {
+        setMoney(res.data);
       }
     });
   };
@@ -64,6 +87,23 @@ const HomePage = () => {
   const addTournament = (data) => {
     Axios.post("http://localhost:4000/tournament", data).then((res) => {
       getTournaments();
+    });
+  };
+
+  const addBooking = (data) => {
+    Axios.post("http://localhost:4000/booking", data).then((res) => {
+      console.log("BOOKING", res);
+      // getBooking();
+      getTournaments();
+    });
+  };
+
+  const getBooking = (data) => {
+    Axios.post("http://localhost:4000/getBooking", { data }).then((res) => {
+      if (res.status === 200) {
+        // console.log("GET BOOKING", res.data);
+        setBookings([...res.data]);
+      }
     });
   };
 
@@ -76,18 +116,14 @@ const HomePage = () => {
     window.location.href = "/login";
   };
 
+  const signUp = () => {
+    window.location.href = "/signup";
+  };
+
   return (
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
-          {/* <IconButton
-            edge="start"
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="menu"
-          >
-            <MenuIcon />
-          </IconButton> */}
           <Typography variant="h6" className={classes.title}>
             Tournament
           </Typography>
@@ -96,9 +132,15 @@ const HomePage = () => {
               Logout
             </Button>
           ) : (
-            <Button onClick={logIn} color="inherit">
-              Login
-            </Button>
+            <span>
+              <Button onClick={logIn} color="inherit">
+                Login
+              </Button>{" "}
+              /
+              <Button onClick={signUp} color="inherit">
+                Sign-Up
+              </Button>
+            </span>
           )}
         </Toolbar>
       </AppBar>
@@ -119,8 +161,21 @@ const HomePage = () => {
           }}
         />
       ) : (
-        <p>&nbsp;&nbsp;View, book, browse tournaments...</p>
+        <span>
+          <p>&nbsp;&nbsp;View, book, browse tournaments...</p>
+          <p>&nbsp;&nbsp;Balance Left : &#8377;{money.money}</p>
+        </span>
       )}
+      <ListView
+        money={money}
+        login={showLogin}
+        adminLogin={adminLogin}
+        data={tournaments}
+        bookingAdd={(data) => {
+          addBooking(data);
+        }}
+        bookingData={bookings}
+      />
     </div>
   );
 };
