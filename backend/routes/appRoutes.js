@@ -133,6 +133,7 @@ module.exports = app => {
             google: true
         };
 
+        console.log("GOOGLE LOGIN", token)
         res.send(token)
     })
 }

@@ -79,6 +79,7 @@ const HomePage = () => {
   const getMoney = (data) => {
     Axios.post("http://localhost:4000/user", { data }).then((res) => {
       if (res.status === 200) {
+        console.log("MONEY", res.data);
         setMoney(res.data);
       }
     });
@@ -92,9 +93,11 @@ const HomePage = () => {
 
   const addBooking = (data) => {
     Axios.post("http://localhost:4000/booking", data).then((res) => {
-      console.log("BOOKING", res);
+      console.log("BOOKING", res, data.seatCost, data.id);
       // getBooking();
       getTournaments();
+      // getBooking(data.id);
+      setMoney({ money: money.money - data.seatCost, id: data.id });
     });
   };
 

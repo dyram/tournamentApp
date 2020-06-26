@@ -39,6 +39,16 @@ export default function ListView({
   const [open, setOpen] = useState(false);
   const [bookedUsers, setBookedUsers] = useState([]);
   const [bookedTname, setBookedTname] = useState("");
+  const [booked, setBooked] = useState(false);
+  const [fetchOpen, setFetchOpen] = useState(false);
+
+  const handleClickOpenz = () => {
+    setFetchOpen(true);
+  };
+
+  const handleClosez = () => {
+    setFetchOpen(false);
+  };
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -50,6 +60,7 @@ export default function ListView({
 
   const bookSeat = (id, seatCost, availSeat) => {
     bookingAdd({ money, id, seatCost, availSeat });
+    setBooked(true);
   };
 
   useEffect(() => {
@@ -114,14 +125,40 @@ export default function ListView({
               bookedIds.includes(obj.id) ? (
                 <Button color="secondary">Unbook</Button>
               ) : (
-                <Button
-                  onClick={(e) => {
-                    bookSeat(obj.id, obj.seatCost, obj.availSeats);
-                  }}
-                  color="primary"
-                >
-                  Book Seat
-                </Button>
+                <div>
+                  <Button
+                    onClick={(e) => {
+                      bookSeat(obj.id, obj.seatCost, obj.availSeats);
+                      handleClickOpenz();
+                    }}
+                    color="primary"
+                  >
+                    Book Seat
+                  </Button>
+                  <Dialog
+                    open={fetchOpen}
+                    onClose={handleClosez}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                  >
+                    <DialogTitle id="alert-dialog-title">
+                      Confirm Booking?
+                    </DialogTitle>
+                    <DialogContent>
+                      <DialogContentText id="alert-dialog-description">
+                        Confirm Booking for {obj.tName}?
+                      </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                      <Button onClick={handleClosez} color="primary" autoFocus>
+                        Close
+                      </Button>
+                      <Button onClick={handleClosez} color="primary" autoFocus>
+                        Confirm
+                      </Button>
+                    </DialogActions>
+                  </Dialog>
+                </div>
               )
             ) : (
               <span></span>
